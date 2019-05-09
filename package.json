@@ -6,11 +6,11 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "build:watch": "NODE_ENV=development webpack --watch --mode development",
-    "build:dev": "NODE_ENV=development webpack --mode development",
-    "build:prod": "NODE_ENV=production webpack --mode production",
-    "start": "NODE_ENV=production node server/index.js",
-    "dev": "concurrently \"NODE_ENV=development nodemon server/index.js\" \"npm run build:watch\""
+    "build:watch": "cross-env NODE_ENV=\"development\" webpack --watch --mode development",
+    "build:dev": "cross-env NODE_ENV=\"development\" webpack --mode development",
+    "build:prod": "cross-env NODE_ENV=\"production\" webpack --mode production",
+    "start": "cross-env NODE_ENV=\"production\" node server/index.js",
+    "dev": "cross-env NODE_ENV=\"development\" concurrently \"nodemon server/index.js\" \"npm run build:watch\""
   },
   "keywords": [],
   "author": "",
@@ -27,6 +27,7 @@
     "@instructure/ui-webpack-config": "^5.52.2",
     "babel-eslint": "^9.0.0",
     "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-react-app": "^3.0.8",
     "eslint-plugin-flowtype": "^2.50.3",
