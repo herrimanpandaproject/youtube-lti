@@ -1,20 +1,53 @@
-import React, { Component } from 'react'
-
-
-import { Heading } from '@instructure/ui-elements'
-import { Button } from '@instructure/ui-buttons'
-
+import React, {Component} from 'react';
+import SearchBar from './SearchBar';
+import axios from 'axios';
 
 class App extends Component {
+  apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.search = this.search.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKey = this.handleKey.bind(this);
+  }
   render() {
     return (
-      <div className="App" style={{ textAlign: 'center', backgroundColor: '#f3f3f3', paddingTop: '25%' }} >
-        <Heading>Now using Instructure-UI components with default Canvas theme!</Heading>
-        <Button>Submit</Button>
-        <p>Bruh momentum</p>
+      <div style={{textAlign: 'center'}}>
+        <SearchBar
+          onChange={this.handleChange}
+          onKeyDown={this.handleKey}
+          search={this.search}
+        />
       </div>
-    )
+    );
+  }
+
+  search() {
+    let self = this;
+    let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
+      this.apiKey
+    }&part=snippet&q=${this.state.search}&type=video`;
+    axios
+      .get(searchUrl)
+      .then(function(res) {
+        self.setState(res);
+        console.log(self.state)
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  }
+
+  handleKey(e) {
+    if (e.key === 'Enter') {
+      this.search();
+    }
+  }
+
+  handleChange(field) {
+    this.setState(field.search);
   }
 }
 
-export default App
+export default App;
