@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
+import axios from 'axios';
 
 class App extends Component {
+  apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
   constructor(props) {
     super(props);
     this.state = {};
@@ -11,13 +13,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div
-        className="App"
-        style={{
-          textAlign: 'center',
-          backgroundColor: '#f3f3f3',
-        }}
-      >
+      <div style={{textAlign: 'center'}}>
         <SearchBar
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
@@ -28,10 +24,19 @@ class App extends Component {
   }
 
   search() {
-    console.log('works');
-    console.log(this.state);
-    //api call using this.state.search, 
-    //store in state for use in displaying/embedding.
+    let self = this;
+    let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
+      this.apiKey
+    }&part=snippet&q=${this.state.search}&type=video`;
+    axios
+      .get(searchUrl)
+      .then(function(res) {
+        self.setState(res);
+        console.log(self.state)
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
   }
 
   handleKey(e) {
