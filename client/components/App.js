@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Heading} from '@instructure/ui-elements';
-import {Button} from '@instructure/ui-buttons';
 import SearchBar from './SearchBar';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.search = this.search.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKey = this.handleKey.bind(this);
   }
   render() {
     return (
@@ -15,27 +16,32 @@ class App extends Component {
         style={{
           textAlign: 'center',
           backgroundColor: '#f3f3f3',
-          paddingTop: '25%',
         }}
       >
-        <Heading>
-          Now using Instructure-UI components with default Canvas theme!
-        </Heading>
         <SearchBar
-          onChange={field => {
-            this.setState(field);
-          }}
+          onChange={this.handleChange}
+          onKeyDown={this.handleKey}
+          search={this.search}
         />
-        <Button
-          onClick={e => {
-            console.log(this.state);
-          }}
-        >
-          Submit
-        </Button>
-        <p>Bruh momentum</p>
       </div>
     );
+  }
+
+  search() {
+    console.log('works');
+    console.log(this.state);
+    //api call using this.state.search, 
+    //store in state for use in displaying/embedding.
+  }
+
+  handleKey(e) {
+    if (e.key === 'Enter') {
+      this.search();
+    }
+  }
+
+  handleChange(field) {
+    this.setState(field.search);
   }
 }
 
