@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
 import EmbedButton from './EmbedButton';
+import SearchResult from './SearchResult'
 import axios from 'axios';
 
 class App extends Component {
@@ -18,11 +19,13 @@ class App extends Component {
           onKeyDown={this.handleKey}
           search={this.search}
         />
-        <EmbedButton
+        <SearchResult/>
+        {/* <EmbedButton
           videoId={this.state.videoId}
           onEmbed={this.onEmbed}
           title="test"
-        />
+        /> */}
+
       </div>
     );
   }
@@ -35,7 +38,7 @@ class App extends Component {
     axios
       .get(searchUrl)
       .then(function(res) {
-        self.setState(res);
+        self.setStaEte(res);
         console.log(self.state);
       })
       .catch(function(err) {
@@ -47,7 +50,7 @@ class App extends Component {
     if (e.key === 'Enter') {
       this.search();
     }
-  };
+  }
 
   handleChange = field => {
     this.setState(field.search);
