@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
+import EmbedButton from './EmbedButton';
 import axios from 'axios';
 
 class App extends Component {
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
+
   constructor(props) {
     super(props);
-    this.state = {};
-    this.search = this.search.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKey = this.handleKey.bind(this);
+    this.state = {videoId: '9h0Arg_-380'};
   }
   render() {
     return (
@@ -19,11 +18,16 @@ class App extends Component {
           onKeyDown={this.handleKey}
           search={this.search}
         />
+        <EmbedButton
+          videoId={this.state.videoId}
+          onEmbed={this.onEmbed}
+          title="test"
+        />
       </div>
     );
   }
 
-  search() {
+  search = () => {
     let self = this;
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
       this.apiKey
@@ -32,22 +36,26 @@ class App extends Component {
       .get(searchUrl)
       .then(function(res) {
         self.setState(res);
-        console.log(self.state)
+        console.log(self.state);
       })
       .catch(function(err) {
         console.log(err);
       });
-  }
+  };
 
-  handleKey(e) {
+  handleKey = e => {
     if (e.key === 'Enter') {
       this.search();
     }
-  }
+  };
 
-  handleChange(field) {
+  handleChange = field => {
     this.setState(field.search);
-  }
+  };
+
+  onEmbed = videoProps => {
+    this.setState(videoProps);
+  };
 }
 
 export default App;
