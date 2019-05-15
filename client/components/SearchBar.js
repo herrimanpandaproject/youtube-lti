@@ -18,7 +18,7 @@ class SearchBar extends Component {
         <FlexItem grow padding="small">
           <TextInput
             label=""
-            placeholder=""
+            placeholder="Search..."
             value={this.props.value}
             onChange={e => {
               let field = {};
