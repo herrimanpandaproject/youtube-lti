@@ -17,10 +17,6 @@ class App extends Component {
       result:[]
     };
 
-    this.search = this.search.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKey = this.handleKey.bind(this);
-
   }
   render() {
     return (
