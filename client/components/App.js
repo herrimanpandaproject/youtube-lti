@@ -10,9 +10,11 @@ class App extends Component {
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
   constructor(props) {
     super(props);
+
     this.state = {
       result:[]
     };
+
     this.search = this.search.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleKey = this.handleKey.bind(this);
