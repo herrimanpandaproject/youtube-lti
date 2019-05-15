@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
+import EmbedButton from './EmbedButton';
+import SearchResult from './SearchResult'
 import axios from 'axios';
 import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
@@ -8,9 +10,9 @@ import { Img } from '@instructure/ui-elements'
 class App extends Component {
   
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
+
   constructor(props) {
     super(props);
-
     this.state = {
       result:[]
     };
@@ -18,7 +20,7 @@ class App extends Component {
     this.search = this.search.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleKey = this.handleKey.bind(this);
-    
+
   }
   render() {
     return (
@@ -47,9 +49,9 @@ class App extends Component {
     );
   }
 
-  search() {
     // passes the Axios request to the Youtube API to get the response, which is the JSON file. From there we set result to be equal to
     // the json file, to avoid issues with the interpolation of {this.state.search} in searchUrl. 
+  search = () => {
     let self = this;
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
       this.apiKey
@@ -58,22 +60,26 @@ class App extends Component {
       .get(searchUrl)
       .then(function(res) {
         self.setState({result:res.data.items});
+        console.log(self.state);
       })
       .catch(function(err) {
         console.log(err);
       });
   }
   
-  handleKey(e) {
+  handleKey = e => {
     if (e.key === 'Enter') {
       this.search();
     }
-  }
+  };
 
-  handleChange(field) {
+  handleChange = field => {
     this.setState(field.search);
-  }
+  };
 
+  onEmbed = videoProps => {
+    this.setState(videoProps);
+  };
 }
 
 export default App;
