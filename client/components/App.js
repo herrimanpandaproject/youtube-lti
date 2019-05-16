@@ -8,11 +8,13 @@ import { Img } from '@instructure/ui-elements'
 class App extends Component {
   
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
+  combineIds;
   constructor(props) {
     super(props);
 
     this.state = {
-      result:[]
+      result:[],
+      stats:[]
     };
 
     this.search = this.search.bind(this);
@@ -21,7 +23,9 @@ class App extends Component {
     
   }
   render() {
+    
     return (
+      
       <div style={{textAlign: 'center'}}>
         <SearchBar
           onChange={this.handleChange}
@@ -37,7 +41,7 @@ class App extends Component {
             </FlexItem>
             <FlexItem width = "15.5%" padding = "medium">
             <Heading>{result.snippet.title}</Heading>
-            <p style = {{fontFamily: 'Arial, sans-serif', hover: 'border: red 5px solid'}}>{result.snippet.description.substring(0, 50)}...</p>
+            <p style = {{fontFamily: 'Lato, Arial, sans-serif', hover: 'border: red 5px solid'}}>{result.snippet.description.substring(0, 50)}...</p>
             <p>{result.snippet.publishedAt.substring(0,4)}</p>
             
             </FlexItem>
@@ -51,6 +55,11 @@ class App extends Component {
     // passes the Axios request to the Youtube API to get the response, which is the JSON file. From there we set result to be equal to
     // the json file, to avoid issues with the interpolation of {this.state.search} in searchUrl. 
     let self = this;
+    //let videoListUrl = {for (i = 0; i < this.state.items.length; i++) (i =>) }
+    //let firstPart =  `https://www.googleapis.com/youtube/v3/videos?
+    //part=snippet,contentDetails,statistics&id=${self.videoListUrl}
+   // &key=${this.apiKey}`;
+
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
       this.apiKey
     }&part=snippet&q=${this.state.search}&type=video`;
@@ -58,6 +67,18 @@ class App extends Component {
       .get(searchUrl)
       .then(function(res) {
         self.setState({result:res.data.items});
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+
+      self.combineIds = combineIds();
+
+      axios
+      .get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${self.combineIds}&key=${this.apiKey}`)
+      .then(function(res) {
+        self.setState({stats:res.data.items});
+        console.log(self.state.stats);
       })
       .catch(function(err) {
         console.log(err);
@@ -72,6 +93,17 @@ class App extends Component {
 
   handleChange(field) {
     this.setState(field.search);
+  }
+
+  combineIds()
+  {
+    let combinedVideoIds = "";
+    var numberOfResponses = 0; 
+    while ( numberOfResponses < 5)
+    {
+      combinedVideoIds = combinedVideoIds + "%2C" + this.state.result.items[numberOfResponses].id.videoId;
+      numberOfResponses = numberOfResponses + 1;
+    }
   }
 
 }
