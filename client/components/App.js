@@ -4,6 +4,7 @@ import axios from 'axios';
 import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
 import { Img } from '@instructure/ui-elements'
+import { brotliCompress } from 'zlib';
 
 class App extends Component {
   
@@ -43,7 +44,7 @@ class App extends Component {
             <Heading>{result.snippet.title}</Heading>
             <p style = {{fontFamily: 'Lato, Arial, sans-serif', hover: 'border: red 5px solid'}}>{result.snippet.description.substring(0, 50)}...</p>
             <p>{result.snippet.publishedAt.substring(0,4)}</p>
-            
+            <p>{this.state.stats[0].statistics.viewCount}</p>
             </FlexItem>
           </Flex>
           )}
@@ -72,13 +73,12 @@ class App extends Component {
         console.log(err);
       });
 
-      self.combineIds = combineIds();
-
+      //self.combineIds = self.combineIds();
+        // Seperate axios call to get the statistics of all the videos, probably a workaround. But can't get to work with just the search call.
       axios
-      .get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${self.combineIds}&key=${this.apiKey}`)
+      .get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=CtyZzMI_R7w&key=${this.apiKey}`)
       .then(function(res) {
         self.setState({stats:res.data.items});
-        console.log(self.state.stats);
       })
       .catch(function(err) {
         console.log(err);
@@ -94,17 +94,17 @@ class App extends Component {
   handleChange(field) {
     this.setState(field.search);
   }
-
-  combineIds()
-  {
-    let combinedVideoIds = "";
-    var numberOfResponses = 0; 
-    while ( numberOfResponses < 5)
-    {
-      combinedVideoIds = combinedVideoIds + "%2C" + this.state.result.items[numberOfResponses].id.videoId;
-      numberOfResponses = numberOfResponses + 1;
-    }
-  }
+  // Intended to get every one of the ID's combined to make easier to put in second Axios call.
+  // combineIds()
+  // {
+  //   let combinedVideoIds = "";
+  //   var numberOfResponses = 0; 
+  //   while ( numberOfResponses < 5)
+  //   {
+  //     combinedVideoIds = combinedVideoIds + "%2C" + this.state.result.items[numberOfResponses].id.videoId;
+  //     numberOfResponses = numberOfResponses + 1;
+  //   }
+  //}
 
 }
 
