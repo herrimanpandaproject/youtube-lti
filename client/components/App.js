@@ -4,10 +4,11 @@ import axios from 'axios';
 import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
 import { Img } from '@instructure/ui-elements'
-import { brotliCompress } from 'zlib';
+
 
 class App extends Component {
   
+
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
   combineIds;
   constructor(props) {
