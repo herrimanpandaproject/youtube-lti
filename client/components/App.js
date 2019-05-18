@@ -5,17 +5,15 @@ import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
 import { Img } from '@instructure/ui-elements'
 import styles from './app.css';
-console.log('styles');
-console.log(styles);
+
 class App extends Component {
   
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
-  combineIds;
+  
   constructor(props) {
     super(props);
 
     this.state = {
-      result:[],
       stats:[]
     };
 
@@ -57,10 +55,7 @@ class App extends Component {
     // passes the Axios request to the Youtube API to get the response, which is the JSON file. From there we set result to be equal to
     // the json file, to avoid issues with the interpolation of {this.state.search} in searchUrl. 
     let self = this;
-    //let videoListUrl = {for (i = 0; i < this.state.items.length; i++) (i =>) }
-    //let firstPart =  `https://www.googleapis.com/youtube/v3/videos?
-    //part=snippet,contentDetails,statistics&id=${self.videoListUrl}
-   // &key=${this.apiKey}`;
+  
 
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
       this.apiKey
