@@ -24,7 +24,8 @@
     "bootstrap": "^4.3.1",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "jest-environment-jsdom-fourteen": "^0.1.0"
+    "jest-environment-jsdom-fourteen": "^0.1.0",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@instructure/ui-babel-preset": "^5.52.2",
