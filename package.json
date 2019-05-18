@@ -25,7 +25,8 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "jest-environment-jsdom-fourteen": "^0.1.0",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "numeral": "^2.0.6"
   },
   "devDependencies": {
     "@instructure/ui-babel-preset": "^5.52.2",

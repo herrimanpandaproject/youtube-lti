@@ -4,6 +4,7 @@ import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
 import { Img } from '@instructure/ui-elements'
 import moment from 'moment'
+import numeral from 'numeral'
 
 class SearchResult extends Component {
   state = {}
@@ -21,7 +22,7 @@ class SearchResult extends Component {
           key={result.etag}
         >
           <Flex justifyItems = "space-between" margin = "large none large none">
-            <FlexItem shrink>
+            <FlexItem shrink padding="medium none medium medium">
               <Img src = {result.snippet.thumbnails.medium.url} alt = "Image not found." style = {{borderRadius: '15px'}}/>
             </FlexItem>
             <FlexItem width = "15.5%" padding = "medium" grow >
@@ -37,7 +38,7 @@ class SearchResult extends Component {
                 : result.snippet.description}
               </p>
               <p>{moment(result.snippet.publishedAt, moment.ISO_8601).format('MMMM DD, YYYY')}</p>
-              <p>{result.statistics.viewCount} views</p>
+              <p>{numeral(result.statistics.viewCount).format('0.0a')} views</p>
             </FlexItem>
           </Flex>
         </div>

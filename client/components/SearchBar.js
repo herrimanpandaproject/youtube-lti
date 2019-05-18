@@ -2,6 +2,8 @@ import {TextInput} from '@instructure/ui-text-input';
 import React, {Component} from 'react';
 import {Button} from '@instructure/ui-buttons';
 import {Flex, FlexItem} from '@instructure/ui-layout';
+import {Img} from '@instructure/ui-elements'
+import {Menu} from '@instructure/ui-menu';
 
 class SearchBar extends Component {
   state = {};
@@ -9,7 +11,7 @@ class SearchBar extends Component {
     return (
       <Flex margin="none none none none">
         <FlexItem shrink padding="none none none x-small" width="7.5%">
-          <img
+          <Img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/YouTube_social_white_squircle_%282017%29.svg/1024px-YouTube_social_white_squircle_%282017%29.svg.png"
             alt="img not found"
             style={{width: '100%', height: '100%'}}

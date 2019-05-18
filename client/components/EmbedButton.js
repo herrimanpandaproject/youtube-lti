@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Menu} from '@instructure/ui-menu';
 import {Button} from '@instructure/ui-buttons';
-import {thisTypeAnnotation} from '@babel/types';
 
 class EmbedButton extends Component {
   constructor(props) {
