@@ -32,7 +32,7 @@ class App extends Component {
         />
 
         
-        {this.state.stats.map(result => 
+        {/* {this.state.stats.map(result => 
           // implementaion of ./SearchResult componnet, this will basically be contained to one JSX element. Next update.
           <Flex visualDebug justifyItems = "center" margin = "large 0 large 0">
             <FlexItem >
@@ -45,7 +45,7 @@ class App extends Component {
             <p>{result.statistics.viewCount}</p>
             </FlexItem>
           </Flex>
-          )}
+          )} */}
 
         <SearchResult result={this.state.stats}/>
 
