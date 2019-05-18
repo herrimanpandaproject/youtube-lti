@@ -32,9 +32,12 @@ class SearchResult extends Component {
                 wordWrap: 'break-word'
                 }}
               >
-                {result.snippet.description}
+                {result.snippet.description.length > 200
+                ? result.snippet.description.substring(0, 197)+"..."
+                : result.snippet.description}
               </p>
               <p>{moment(result.snippet.publishedAt, moment.ISO_8601).format('MMMM DD, YYYY')}</p>
+              <p>{result.statistics.viewCount} views</p>
             </FlexItem>
           </Flex>
         </div>
