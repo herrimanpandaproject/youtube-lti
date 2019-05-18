@@ -36,10 +36,10 @@ class App extends Component {
         {this.state.stats.map(result => 
           // implementaion of ./SearchResult componnet, this will basically be contained to one JSX element. Next update.
           <Flex visualDebug justifyItems = "center" margin = "large 0 large 0">
-            <FlexItem >
+            <FlexItem > 
             <Img src = {result.snippet.thumbnails.medium.url} alt = "Image not found." style = {{borderRadius: '15px'}}/>
             </FlexItem>
-            <FlexItem width = "15.5%" padding = "medium">
+            <FlexItem shrink size = "200px" padding = "medium">
             <Heading>{result.snippet.title}</Heading>
             <p style = {{fontFamily: 'Lato, Arial, sans-serif', hover: 'border: red 5px solid'}}>{result.snippet.description.substring(0, 50)}...</p>
             <p>{result.snippet.publishedAt.substring(0,4)}</p>
@@ -106,6 +106,8 @@ class App extends Component {
     }
     return combinedVideoIds;
   }
+
+  
 
 }
 
