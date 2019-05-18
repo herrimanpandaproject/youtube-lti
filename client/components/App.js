@@ -3,10 +3,7 @@ import SearchBar from './SearchBar';
 import EmbedButton from './EmbedButton';
 import SearchResult from './SearchResult'
 import axios from 'axios';
-import {Flex, FlexItem} from '@instructure/ui-layout';
-import {Heading} from '@instructure/ui-elements';
-import { Img } from '@instructure/ui-elements'
-import styles from './app.css';
+import styles from './Sheet.css';
 
 
 class App extends Component {
@@ -24,14 +21,15 @@ class App extends Component {
     
     return (
       
-      <div>
+      <div >
         <SearchBar
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
           search={this.search}
         />
         <SearchResult result={this.state.stats}/>
-
+        <p className = {styles.selector}>Bro</p>
+        <EmbedButton/>
       </div>
     );
   }
