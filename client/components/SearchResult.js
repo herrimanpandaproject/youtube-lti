@@ -1,3 +1,4 @@
+
 import React, {Component} from 'react'
 import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
@@ -45,3 +46,4 @@ class SearchResult extends Component {
 }
 
 export default SearchResult
+

@@ -19,6 +19,7 @@
     "@instructure/ui-buttons": "^6.1.0",
     "@instructure/ui-menu": "^6.1.0",
     "@instructure/ui-text-input": "^6.1.0",
+    "@instructure/ui-themeable": "^6.2.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "ejs": "^2.6.1",
