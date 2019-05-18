@@ -1,26 +1,24 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
+import EmbedButton from './EmbedButton';
+import SearchResult from './SearchResult'
 import axios from 'axios';
 import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
 import { Img } from '@instructure/ui-elements'
 import styles from './app.css';
 
+
 class App extends Component {
   
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
-  
+
   constructor(props) {
     super(props);
-
     this.state = {
       stats:[]
     };
 
-    this.search = this.search.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKey = this.handleKey.bind(this);
-    
   }
   render() {
     
@@ -32,6 +30,7 @@ class App extends Component {
           onKeyDown={this.handleKey}
           search={this.search}
         />
+
         
         {this.state.stats.map(result => 
           // implementaion of ./SearchResult componnet, this will basically be contained to one JSX element. Next update.
@@ -47,13 +46,16 @@ class App extends Component {
             </FlexItem>
           </Flex>
           )}
+
+        <SearchResult result={this.state.stats}/>
+
       </div>
     );
   }
 
-  search() {
     // passes the Axios request to the Youtube API to get the response, which is the JSON file. From there we set result to be equal to
     // the json file, to avoid issues with the interpolation of {this.state.search} in searchUrl. 
+  search = () => {
     let self = this;
   
 
@@ -64,6 +66,7 @@ class App extends Component {
     axios
       .get(searchUrl)
       .then(function(res) {
+
        
         let combinedId = self.combineIds(res.data.items);
       //
@@ -77,6 +80,7 @@ class App extends Component {
           console.log(err);
         });
       //
+
       })
       .catch(function(err) {
         console.log(err);
@@ -85,15 +89,19 @@ class App extends Component {
       
   }
   
+
   handleKey = (e) => {
+
     if (e.key === 'Enter') {
       this.search();
     }
-  }
+  };
+
 
   handleChange = (field) => {
     this.setState(field.search);
-  }
+  };
+
 
   combineIds = (items) =>
   {
@@ -106,6 +114,11 @@ class App extends Component {
     }
     return combinedVideoIds;
   }
+
+
+  onEmbed = videoProps => {
+    this.setState(videoProps);
+  };
 
 }
 
