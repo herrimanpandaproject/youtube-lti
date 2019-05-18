@@ -24,29 +24,12 @@ class App extends Component {
     
     return (
       
-      <div style={{textAlign: 'center'}}>
+      <div>
         <SearchBar
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
           search={this.search}
         />
-
-        
-        {/* {this.state.stats.map(result => 
-          // implementaion of ./SearchResult componnet, this will basically be contained to one JSX element. Next update.
-          <Flex visualDebug justifyItems = "center" margin = "large 0 large 0">
-            <FlexItem >
-            <Img src = {result.snippet.thumbnails.medium.url} alt = "Image not found." style = {{borderRadius: '15px'}}/>
-            </FlexItem>
-            <FlexItem width = "15.5%" padding = "medium">
-            <Heading>{result.snippet.title}</Heading>
-            <p style = {{fontFamily: 'Lato, Arial, sans-serif', hover: 'border: red 5px solid'}}>{result.snippet.description.substring(0, 50)}...</p>
-            <p>{result.snippet.publishedAt.substring(0,4)}</p>
-            <p>{result.statistics.viewCount}</p>
-            </FlexItem>
-          </Flex>
-          )} */}
-
         <SearchResult result={this.state.stats}/>
 
       </div>
@@ -57,8 +40,6 @@ class App extends Component {
     // the json file, to avoid issues with the interpolation of {this.state.search} in searchUrl. 
   search = () => {
     let self = this;
-  
-
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
       this.apiKey
     }&part=snippet&q=${this.state.search}&type=video`;
@@ -66,10 +47,7 @@ class App extends Component {
     axios
       .get(searchUrl)
       .then(function(res) {
-
-       
         let combinedId = self.combineIds(res.data.items);
-      //
         axios
         .get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${combinedId}&key=${self.apiKey}`)
         .then(function(res) {
@@ -79,29 +57,21 @@ class App extends Component {
         .catch(function(err) {
           console.log(err);
         });
-      //
-
       })
       .catch(function(err) {
         console.log(err);
-      });
-
-      
+      });  
   }
   
-
   handleKey = (e) => {
-
     if (e.key === 'Enter') {
       this.search();
     }
   };
 
-
   handleChange = (field) => {
     this.setState(field.search);
   };
-
 
   combineIds = (items) =>
   {
@@ -115,9 +85,8 @@ class App extends Component {
     return combinedVideoIds;
   }
 
-
   onEmbed = videoProps => {
-    this.setState(videoProps);
+    this.setState({iframeProps : videoProps});
   };
 
 }
