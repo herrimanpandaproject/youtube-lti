@@ -2,6 +2,7 @@ import {TextInput} from '@instructure/ui-text-input';
 import React, {Component} from 'react';
 import {Button} from '@instructure/ui-buttons';
 import {Flex, FlexItem} from '@instructure/ui-layout';
+import { IconSearchLine } from '@instructure/ui-icons';
 
 class SearchBar extends Component {
   state = {};
@@ -30,7 +31,7 @@ class SearchBar extends Component {
           />
         </FlexItem>
         <FlexItem>
-          <Button onClick={this.props.search}>Search</Button>
+          <Button  icon = {IconSearchLine} onClick={this.props.search}>Search</Button>
         </FlexItem>
       </Flex>
     );
