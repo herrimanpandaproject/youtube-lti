@@ -7,6 +7,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import { IconEyeLine } from '@instructure/ui-icons';
 import { IconLikeLine } from '@instructure/ui-icons';
+
 class SearchResult extends Component {
   state = {}
   render() {
@@ -43,6 +44,8 @@ class SearchResult extends Component {
                 ? result.snippet.description.substring(0, 198)+"..."
                 : result.snippet.description}
               </p>
+              <p>{moment(result.snippet.publishedAt, moment.ISO_8601).format('MMMM DD, YYYY')}</p>
+              <p>{numeral(result.statistics.viewCount).format('0.0a')} views</p>
             </FlexItem>
           </Flex>
         </div>
