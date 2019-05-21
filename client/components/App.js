@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
-import EmbedButton from './EmbedButton';
 import SearchResult from './SearchResult'
 import axios from 'axios';
 import styles from './Sheet.css';
@@ -29,9 +28,7 @@ class App extends Component {
           onKeyDown={this.handleKey}
           search={this.search}
         />
-        <SearchResult result={this.state.stats}/>
-        <p className = {styles.selector}>Bro</p>
-        <EmbedButton/>
+        <SearchResult result={this.state.stats} onEmbed={this.onEmbed}/>
       </div>
     );
   }
@@ -87,6 +84,7 @@ class App extends Component {
 
   onEmbed = videoProps => {
     this.setState({iframeProps : videoProps});
+    console.log(this.state)
   };
 
 }
