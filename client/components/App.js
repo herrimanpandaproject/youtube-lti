@@ -4,8 +4,12 @@ import SearchResult from './SearchResult';
 import Pages from './Pages';
 import axios from 'axios';
 import styles from './Sheet.css';
+import {themeable} from '@instructure/ui-themeable'
 import { Alert } from '@instructure/ui-alerts'
 
+const EMPTY_THEME = () => {};
+
+@themeable(EMPTY_THEME, styles)
 class App extends Component {
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
 
@@ -22,6 +26,9 @@ class App extends Component {
     console.log(this.state)
     return (
       <div >
+        <p className={styles.selector}>
+          Test
+        </p>
         <SearchBar
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
