@@ -4,7 +4,7 @@ import EmbedButton from './EmbedButton';
 import SearchResult from './SearchResult'
 import axios from 'axios';
 import styles from './Sheet.css';
-
+import DetailedVideo from './DetailedVideo';
 
 class App extends Component {
   
@@ -30,6 +30,7 @@ class App extends Component {
         <SearchResult result={this.state.stats}/>
         <p className = {styles.selector}>Bro</p>
         <EmbedButton/>
+        
       </div>
     );
   }
