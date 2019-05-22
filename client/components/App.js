@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
-import EmbedButton from './EmbedButton';
 import SearchResult from './SearchResult'
 import axios from 'axios';
 import styles from './Sheet.css';
-import DetailedVideo from './DetailedVideo';
+
 
 class App extends Component {
   
@@ -13,7 +12,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      stats:[]
+      stats:[],
+      maxResults: 50,
+      resultsPerPage: 5
     };
 
   }
@@ -27,10 +28,7 @@ class App extends Component {
           onKeyDown={this.handleKey}
           search={this.search}
         />
-        <SearchResult result={this.state.stats}/>
-        <p className = {styles.selector}>Bro</p>
-        <EmbedButton/>
-        
+        <SearchResult result={this.state.stats} onEmbed={this.onEmbed}/>
       </div>
     );
   }
@@ -41,7 +39,7 @@ class App extends Component {
     let self = this;
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
       this.apiKey
-    }&part=snippet&q=${this.state.search}&type=video`;
+    }&part=snippet&maxResults=${this.state.maxResults}&q=${this.state.search}&type=video`;
     
     axios
       .get(searchUrl)
@@ -76,7 +74,7 @@ class App extends Component {
   {
     let combinedVideoIds = "";
     var numberOfResponses = 0; 
-    while ( numberOfResponses < 5)
+    while ( numberOfResponses < this.state.maxResults - 1 )
     {
       combinedVideoIds = combinedVideoIds + "%2C" + items[numberOfResponses].id.videoId;
       numberOfResponses = numberOfResponses + 1;
@@ -86,6 +84,7 @@ class App extends Component {
 
   onEmbed = videoProps => {
     this.setState({iframeProps : videoProps});
+    console.log(this.state)
   };
 
 }

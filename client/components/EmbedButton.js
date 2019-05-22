@@ -31,7 +31,8 @@ class EmbedButton extends Component {
   };
 
   embed() {
-    let multiplier;
+    let width = 560, height = 315, multiplier;
+    console.log(this.state.selection)
     switch (this.state.selection) {
       case 'small':
         multiplier = 1;
@@ -43,7 +44,7 @@ class EmbedButton extends Component {
         multiplier = 1.5;
         break;
     }
-
+    
     this.props.onEmbed({
       width: 560 * multiplier,
       height: Math.round(315 * multiplier),
