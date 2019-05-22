@@ -4,6 +4,7 @@ import SearchResult from './SearchResult';
 import Pages from './Pages';
 import axios from 'axios';
 import styles from './Sheet.css';
+import { Alert } from '@instructure/ui-alerts'
 
 class App extends Component {
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
@@ -12,7 +13,7 @@ class App extends Component {
     super(props);
     this.state = {
       stats:[],
-      maxResults: 25,
+      maxResults: 50,
       resultsPerPage: 5,
       currentPage: 0
     };
@@ -26,6 +27,16 @@ class App extends Component {
           onKeyDown={this.handleKey}
           search={this.search}
         />
+        {this.state.error ? 
+          <Alert
+            variant="error"
+            closeButtonLabel="Close"
+            margin="small"
+          > 
+            {this.state.error.message} 
+          </Alert> :
+          ''
+        }
         <SearchResult 
           result={this.state.stats} 
           onEmbed={this.onEmbed} 
@@ -62,10 +73,12 @@ class App extends Component {
         })
         .catch(function(err) {
           console.log(err);
+          self.setState({error: err})
         });
       })
       .catch(function(err) {
         console.log(err);
+        self.setState({error: err})
       });  
   }
   
