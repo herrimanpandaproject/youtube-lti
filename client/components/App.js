@@ -1,35 +1,54 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
-import EmbedButton from './EmbedButton';
-import SearchResult from './SearchResult'
+import SearchResult from './SearchResult';
+import Pages from './Pages';
 import axios from 'axios';
 import styles from './Sheet.css';
-
+import { Alert } from '@instructure/ui-alerts'
 
 class App extends Component {
-  
   apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
 
   constructor(props) {
     super(props);
     this.state = {
-      stats:[]
+      stats:[],
+      maxResults: 50,
+      resultsPerPage: 5,
+      currentPage: 0
     };
-
   }
   render() {
-    
+    console.log(this.state)
     return (
-      
       <div >
         <SearchBar
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
           search={this.search}
         />
-        <SearchResult result={this.state.stats}/>
-        <p className = {styles.selector}>Bro</p>
-        <EmbedButton/>
+        {this.state.error ? 
+          <Alert
+            variant="error"
+            closeButtonLabel="Close"
+            margin="small"
+          > 
+            {this.state.error.message} 
+          </Alert> :
+          ''
+        }
+        <SearchResult 
+          result={this.state.stats} 
+          onEmbed={this.onEmbed} 
+          page={this.state.currentPage}
+          resultsPerPage={this.state.resultsPerPage}
+          length={this.state.length}
+        />
+        {this.state.stats.length > 0 ? 
+          <Pages nextPage={this.nextPage} pages={Math.round(this.state.maxResults/this.state.resultsPerPage)}/>
+          :
+          ''
+        }
       </div>
     );
   }
@@ -40,7 +59,7 @@ class App extends Component {
     let self = this;
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
       this.apiKey
-    }&part=snippet&q=${this.state.search}&type=video`;
+    }&part=snippet&maxResults=${this.state.maxResults}&q=${this.state.search}&type=video`;
     
     axios
       .get(searchUrl)
@@ -49,15 +68,17 @@ class App extends Component {
         axios
         .get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${combinedId}&key=${self.apiKey}`)
         .then(function(res) {
-          self.setState({stats:res.data.items});
+          self.setState({stats:res.data.items, length: res.data.items.length});
           console.log(self.state.stats);
         })
         .catch(function(err) {
           console.log(err);
+          self.setState({error: err})
         });
       })
       .catch(function(err) {
         console.log(err);
+        self.setState({error: err})
       });  
   }
   
@@ -75,7 +96,7 @@ class App extends Component {
   {
     let combinedVideoIds = "";
     var numberOfResponses = 0; 
-    while ( numberOfResponses < 5)
+    while ( numberOfResponses < this.state.maxResults - 1 )
     {
       combinedVideoIds = combinedVideoIds + "%2C" + items[numberOfResponses].id.videoId;
       numberOfResponses = numberOfResponses + 1;
@@ -86,6 +107,10 @@ class App extends Component {
   onEmbed = videoProps => {
     this.setState({iframeProps : videoProps});
   };
+
+  nextPage = page => {
+    this.setState({currentPage: page});
+  }
 
 }
 

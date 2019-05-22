@@ -17,9 +17,11 @@
   "license": "ISC",
   "dependencies": {
     "@instructure/postcss-themeable-styles": "^6.2.0",
+    "@instructure/ui-alerts": "^6.2.0",
     "@instructure/ui-buttons": "^6.1.0",
     "@instructure/ui-icons": "^6.2.0",
     "@instructure/ui-menu": "^6.1.0",
+    "@instructure/ui-pagination": "^6.2.0",
     "@instructure/ui-postcss-config": "^6.2.0",
     "@instructure/ui-text-input": "^6.1.0",
     "@instructure/ui-themeable": "^6.2.0",
@@ -29,7 +31,8 @@
     "express": "^4.16.4",
     "jest-environment-jsdom-fourteen": "^0.1.0",
     "moment": "^2.24.0",
-    "numeral": "^2.0.6"
+    "numeral": "^2.0.6",
+    "react-measure": "^2.3.0"
   },
   "devDependencies": {
     "@instructure/ui-babel-preset": "^5.52.2",

@@ -5,7 +5,7 @@ import {Button} from '@instructure/ui-buttons';
 class EmbedButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {selection: ['small']};
+    this.state = {selection: [1]};
   }
   render() {
     return (
@@ -31,8 +31,8 @@ class EmbedButton extends Component {
   };
 
   embed() {
-    let multiplier;
-    switch (this.state.selection) {
+    let width = 560, height = 315, multiplier;
+    switch (this.state.selection[0]) {
       case 'small':
         multiplier = 1;
         break;
@@ -43,7 +43,7 @@ class EmbedButton extends Component {
         multiplier = 1.5;
         break;
     }
-
+    
     this.props.onEmbed({
       width: 560 * multiplier,
       height: Math.round(315 * multiplier),
