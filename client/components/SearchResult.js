@@ -44,28 +44,36 @@ class SearchResult extends Component {
             direction="column"
           >
             <FlexItem padding="medium" align="center">
+              {this.state.detail ?
+              <iframe width="510" height="315" src={`https://www.youtube.com/embed/${result.id}`} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
+              : 
               <Img
                 src={result.snippet.thumbnails.medium.url}
                 alt="Image not found."
                 style={{
                   borderRadius: '10px',
                 }}
-              />
+              /> }
+              
             </FlexItem>
-            <FlexItem padding="none medium none medium" overflowX= 'hidden'>
+            <FlexItem padding="none medium none medium">
               <Heading level="h4">
                 {result.snippet.title
                   .replace(/&#39;/g, "'")
                   .replace(/&quot;/g, '"')}
               </Heading>
-              <a
+              <p> 
+                Published By:
+                 <a 
                 href={`https://www.youtube.com/channel/${
                   result.snippet.channelId
                 }`}
                 target="_blank"
-              >
-                Published By: {result.snippet.channelTitle}
-              </a>
+                style = {this.styles.channelStyle}
+                >
+                 {result.snippet.channelTitle}
+                </a>
+              </p>
               <p>
                 {moment(result.snippet.publishedAt, moment.ISO_8601).format(
                   'MMMM DD, YYYY',
@@ -79,10 +87,9 @@ class SearchResult extends Component {
                 {numeral(result.statistics.dislikeCount).format('0.0a')}{' '}
                 <IconLikeLine rotate="180" color="primary" />
               </p>
-              <p style={this.styles.overflowPrevention}>
-                {result.snippet.description.length > 213
-                  ? result.snippet.description.substring(0, 211) + '...'
-                  : result.snippet.description}
+              <p style = {this.styles.overflowPrevention}>
+                {this.state.detail ? result.snippet.description.substring(0, 311) + '...' : 
+                  result.snippet.description.substring(0, 211) + '...'}
               </p>
             </FlexItem>
             <FlexItem padding="none none medium none" align="center">
