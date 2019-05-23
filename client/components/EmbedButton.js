@@ -9,17 +9,17 @@ class EmbedButton extends Component {
   }
   render() {
     return (
-      <Menu placement="bottom" trigger={<Button>Embed</Button>}>
-        <Menu.Group
-          label="Size"
-          selected={this.state.selection}
-          onSelect={this.handleSelect}
-        >
-          <Menu.Item value="small">Small</Menu.Item>
-          <Menu.Item value="medium">Medium</Menu.Item>
-          <Menu.Item value="large">Large</Menu.Item>
-        </Menu.Group>
-      </Menu>
+        <Menu placement="bottom" trigger={<Button>Embed</Button>}>
+          <Menu.Group
+            label="Size"
+            selected={this.state.selection}
+            onSelect={this.handleSelect}
+          >
+            <Menu.Item value="small">Small</Menu.Item>
+            <Menu.Item value="medium">Medium</Menu.Item>
+            <Menu.Item value="large">Large</Menu.Item>
+          </Menu.Group>
+        </Menu>
     );
   }
 
