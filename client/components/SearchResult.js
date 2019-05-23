@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
 import { Img } from '@instructure/ui-elements';
 import moment from 'moment';
 import numeral from 'numeral';
+import styles from './Sheet.js';
 import { IconEyeLine } from '@instructure/ui-icons';
 import { IconLikeLine } from '@instructure/ui-icons';
 import { Pagination } from '@instructure/ui-pagination';
-import EmbedButton from './EmbedButton'
+import EmbedButton from './EmbedButton';
 
 class SearchResult extends Component {
   state = {}
+  styles = new styles();
 
   componentDidUpdate() {
     window.scrollTo(0, 0)
@@ -28,17 +29,8 @@ class SearchResult extends Component {
       this.props.result.map((result, index) => {
         return index >= min && index <= max ? 
           <div 
-            style= {{
-              backgroundColor: '#eaebed', 
-              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-              width: '60%',
-              maxWidth: '378px',
-              minWidth: '220px',
-              margin: '0 auto',
-              borderRadius: '10px'
-            }}
-            key={result.etag}
-            //ref={(ref) => this._div = ref}
+            style = {this.styles.resultCard}
+            key = {result.etag}
           >
             <Flex justifyItems = "space-between" margin = "large none large none" direction='column'>
               <FlexItem padding = "medium" align="center">
@@ -54,11 +46,7 @@ class SearchResult extends Component {
                   {numeral(result.statistics.likeCount).format('0.0a')} <IconLikeLine color = "primary"/> {'- '}
                   {numeral(result.statistics.dislikeCount).format('0.0a')} <IconLikeLine rotate = "180" color = "primary"/> 
                 </p>  
-                <p style = {{
-                  fontFamily: 'Arial, sans-serif', 
-                  wordWrap: 'break-word',
-                  }}
-                >
+                <p style = {styles.overflowPrevention}>
                   {result.snippet.description.length > 213
                   ? result.snippet.description.substring(0, 211)+"..."
                   : result.snippet.description}
