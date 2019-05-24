@@ -6,7 +6,9 @@ import axios from 'axios';
 import {Alert} from '@instructure/ui-alerts';
 
 class App extends Component {
-  apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
+  // Jaden key  
+  // apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
+  apiKey = 'AIzaSyBwv3sutjNiWbhJOAL8PLWe1rO_AJg9v2U';
 
   constructor(props) {
     super(props);

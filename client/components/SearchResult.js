@@ -10,6 +10,8 @@ import {IconLikeLine} from '@instructure/ui-icons';
 import {Pagination} from '@instructure/ui-pagination';
 import EmbedButton from './EmbedButton';
 import {Button} from '@instructure/ui-buttons';
+import { IconInfoLine } from '@instructure/ui-icons';
+
 
 class SearchResult extends Component {
   state = {};
@@ -40,32 +42,40 @@ class SearchResult extends Component {
         >
           <Flex
             justifyItems="space-between"
-            margin="large none large none"
+            margin="large none x-small none"
             direction="column"
           >
             <FlexItem padding="medium" align="center">
+              {this.state.detail ?
+              <iframe width="510" height="315" src={`https://www.youtube.com/embed/${result.id}`} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
+              : 
               <Img
                 src={result.snippet.thumbnails.medium.url}
                 alt="Image not found."
                 style={{
                   borderRadius: '10px',
                 }}
-              />
+              /> }
+              
             </FlexItem>
-            <FlexItem padding="none medium none medium" overflowX= 'hidden'>
+            <FlexItem padding="none medium none medium">
               <Heading level="h4">
                 {result.snippet.title
                   .replace(/&#39;/g, "'")
                   .replace(/&quot;/g, '"')}
               </Heading>
-              <a
+              <p> 
+                Published By:
+                 <a 
                 href={`https://www.youtube.com/channel/${
                   result.snippet.channelId
                 }`}
                 target="_blank"
-              >
-                Published By: {result.snippet.channelTitle}
-              </a>
+                style = {this.styles.channelStyle}
+                >
+                 {result.snippet.channelTitle}
+                </a>
+              </p>
               <p>
                 {moment(result.snippet.publishedAt, moment.ISO_8601).format(
                   'MMMM DD, YYYY',
@@ -79,22 +89,28 @@ class SearchResult extends Component {
                 {numeral(result.statistics.dislikeCount).format('0.0a')}{' '}
                 <IconLikeLine rotate="180" color="primary" />
               </p>
-              <p style={this.styles.overflowPrevention}>
-                {result.snippet.description.length > 213
-                  ? result.snippet.description.substring(0, 211) + '...'
-                  : result.snippet.description}
+              <p style = {this.styles.overflowPrevention}>
+                {this.state.detail ? result.snippet.description.substring(0, 311) + '...' : 
+                  result.snippet.description.substring(0, 211) + '...'}
               </p>
             </FlexItem>
-            <FlexItem padding="none none medium none" align="center">
-              <EmbedButton
+          </Flex>
+
+          
+          <Flex justifyItems = "end">
+          <FlexItem padding="none none small x-small">
+              <Button onClick={this.showDetail} icon = {IconInfoLine}  margin="none none none medium">
+                Details
+              </Button>
+            </FlexItem>
+          <FlexItem padding = "none none small small">
+            <EmbedButton
                 onEmbed={this.props.onEmbed}
                 videoId={result.id}
                 title={result.snippet.title}
               />
-              <Button onClick={this.showDetail} margin="none none none medium">
-                Details
-              </Button>
-            </FlexItem>
+          </FlexItem>
+
           </Flex>
         </div>
       ) : (
