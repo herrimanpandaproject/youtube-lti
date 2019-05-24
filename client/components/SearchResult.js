@@ -10,6 +10,8 @@ import {IconLikeLine} from '@instructure/ui-icons';
 import {Pagination} from '@instructure/ui-pagination';
 import EmbedButton from './EmbedButton';
 import {Button} from '@instructure/ui-buttons';
+import { IconInfoLine } from '@instructure/ui-icons';
+
 
 class SearchResult extends Component {
   state = {};
@@ -40,7 +42,7 @@ class SearchResult extends Component {
         >
           <Flex
             justifyItems="space-between"
-            margin="large none large none"
+            margin="large none x-small none"
             direction="column"
           >
             <FlexItem padding="medium" align="center">
@@ -92,16 +94,23 @@ class SearchResult extends Component {
                   result.snippet.description.substring(0, 211) + '...'}
               </p>
             </FlexItem>
-            <FlexItem padding="none none medium none" align="center">
-              <EmbedButton
+          </Flex>
+
+          
+          <Flex justifyItems = "end">
+          <FlexItem padding="none none small x-small">
+              <Button onClick={this.showDetail} icon = {IconInfoLine}  margin="none none none medium">
+                Details
+              </Button>
+            </FlexItem>
+          <FlexItem padding = "none none small small">
+            <EmbedButton
                 onEmbed={this.props.onEmbed}
                 videoId={result.id}
                 title={result.snippet.title}
               />
-              <Button onClick={this.showDetail} margin="none none none medium">
-                Details
-              </Button>
-            </FlexItem>
+          </FlexItem>
+
           </Flex>
         </div>
       ) : (
