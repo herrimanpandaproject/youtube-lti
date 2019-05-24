@@ -19,6 +19,7 @@ class EmbedButton extends Component {
             <Menu.Item value="small">Small</Menu.Item>
             <Menu.Item value="medium">Medium</Menu.Item>
             <Menu.Item value="large">Large</Menu.Item>
+            <Menu.Item value="Link">Link</Menu.Item>
           </Menu.Group>
         </Menu>
     );
