@@ -21,8 +21,11 @@ class SearchResult extends Component {
     window.scrollTo(0, 0);
   }
 
-  showDetail = () => {
-    this.setState({detail: this.state.detail ? false : true});
+  showDetail = result => {
+    this.setState({
+      detail: this.state.detail ? false : true,
+      key: result.etag,
+    });
   };
 
   render() {
@@ -34,7 +37,7 @@ class SearchResult extends Component {
       return index >= min && index <= max ? (
         <div
           style={
-            this.state.detail
+            this.state.detail && this.state.key == result.etag
               ? this.styles.detailedCard
               : this.styles.resultCard
           }
@@ -46,8 +49,8 @@ class SearchResult extends Component {
             direction="column"
           >
             <FlexItem padding="medium" align="center">
-              {this.state.detail ?
-              <iframe width="510" height="315" src={`https://www.youtube.com/embed/${result.id}`} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
+              {this.state.detail && this.state.key == result.etag ?
+              <iframe width="510" height="315" src={`https://www.youtube.com/embed/${result.id}`} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> 
               : 
               <Img
                 src={result.snippet.thumbnails.medium.url}
@@ -90,16 +93,14 @@ class SearchResult extends Component {
                 <IconLikeLine rotate="180" color="primary" />
               </p>
               <p style = {this.styles.overflowPrevention}>
-                {this.state.detail ? result.snippet.description.substring(0, 311) + '...' : 
+                {this.state.detail && this.state.key == result.etag ? result.snippet.description.substring(0, 611) + '...' : 
                   result.snippet.description.substring(0, 211) + '...'}
               </p>
             </FlexItem>
           </Flex>
-
-          
           <Flex justifyItems = "end">
           <FlexItem padding="none none small x-small">
-              <Button onClick={this.showDetail} icon = {IconInfoLine}  margin="none none none medium">
+              <Button onClick={() => this.showDetail(result)} icon = {IconInfoLine}  margin="none none none medium">
                 Details
               </Button>
             </FlexItem>
@@ -110,7 +111,6 @@ class SearchResult extends Component {
                 title={result.snippet.title}
               />
           </FlexItem>
-
           </Flex>
         </div>
       ) : (

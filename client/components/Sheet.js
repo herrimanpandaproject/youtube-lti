@@ -18,8 +18,6 @@ class styles {
         minWidth: '560px',
         margin: '0 auto',
         borderRadius: '10px'
-
-        
       };
    
       this.overflowPrevention = {
