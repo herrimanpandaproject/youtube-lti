@@ -100,7 +100,7 @@ class SearchResult extends Component {
                   'MMMM DD, YYYY',
                 )}
               </p>
-              <VideoStats percent={percent} stats={result.statistics} detailed={this.state.key == result.etag}/>
+              <VideoStats percent={percent} stats={result.statistics}/>
               <p style = {this.styles.overflowPrevention}>
                 {this.state.key == result.etag ? result.snippet.description.substring(0, 611) + '...' : 
                   result.snippet.description.substring(0, 211) + '...'}
