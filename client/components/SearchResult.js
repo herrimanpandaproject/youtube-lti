@@ -11,22 +11,37 @@ import {Pagination} from '@instructure/ui-pagination';
 import EmbedButton from './EmbedButton';
 import {Button} from '@instructure/ui-buttons';
 import { IconInfoLine } from '@instructure/ui-icons';
-
+import VideoStats from './VideoStats'
 
 class SearchResult extends Component {
   state = {};
   styles = new styles();
+  page = this.props.page;
 
   componentDidUpdate() {
-    window.scrollTo(0, 0);
+    if(this.props.page != this.page) {
+      this.page = this.props.page
+      window.scrollTo(0, 0);
+    }
   }
 
   showDetail = result => {
-    this.setState({
-      detail: this.state.detail ? false : true,
-      key: result.etag,
-    });
+    if(this.state.key == result.etag) {
+      this.setState({
+        key: '',
+      });
+    } else {
+      this.setState({
+        key: result.etag,
+      });
+    } 
   };
+
+  calcPercent = ({likeCount, dislikeCount}) => {
+    const likes = parseInt(likeCount);
+    const dislikes = parseInt(dislikeCount);
+    return likes/(likes+dislikes)*100;
+  }
 
   render() {
     let min = this.props.page * this.props.resultsPerPage;
@@ -34,10 +49,11 @@ class SearchResult extends Component {
     max = max >= this.props.length ? this.props.length - 1 : max;
 
     return this.props.result.map((result, index) => {
+      const percent = this.calcPercent(result.statistics)
       return index >= min && index <= max ? (
         <div
           style={
-            this.state.detail && this.state.key == result.etag
+            this.state.key == result.etag
               ? this.styles.detailedCard
               : this.styles.resultCard
           }
@@ -49,7 +65,7 @@ class SearchResult extends Component {
             direction="column"
           >
             <FlexItem padding="medium" align="center">
-              {this.state.detail && this.state.key == result.etag ?
+              {this.state.key == result.etag ?
               <iframe width="510" height="315" src={`https://www.youtube.com/embed/${result.id}`} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> 
               : 
               <Img
@@ -76,7 +92,7 @@ class SearchResult extends Component {
                 target="_blank"
                 style = {this.styles.channelStyle}
                 >
-                 {result.snippet.channelTitle}
+                 {' '}{result.snippet.channelTitle}
                 </a>
               </p>
               <p>
@@ -84,16 +100,9 @@ class SearchResult extends Component {
                   'MMMM DD, YYYY',
                 )}
               </p>
-              <p>
-                {numeral(result.statistics.viewCount).format('0.0a')}{' '}
-                <IconEyeLine color="primary" /> {'- '}
-                {numeral(result.statistics.likeCount).format('0.0a')}{' '}
-                <IconLikeLine color="primary" /> {'- '}
-                {numeral(result.statistics.dislikeCount).format('0.0a')}{' '}
-                <IconLikeLine rotate="180" color="primary" />
-              </p>
+              <VideoStats percent={percent} stats={result.statistics} detailed={this.state.key == result.etag}/>
               <p style = {this.styles.overflowPrevention}>
-                {this.state.detail && this.state.key == result.etag ? result.snippet.description.substring(0, 611) + '...' : 
+                {this.state.key == result.etag ? result.snippet.description.substring(0, 611) + '...' : 
                   result.snippet.description.substring(0, 211) + '...'}
               </p>
             </FlexItem>

@@ -50,8 +50,9 @@ class App extends Component {
             )}
           />
         ) : (
-          ''
+          <p style={{textAlign: 'center'}}>{this.state.loading}</p>
         )}
+
       </div>
     );
   }
@@ -65,6 +66,7 @@ class App extends Component {
     }&part=snippet&maxResults=${this.state.maxResults}&q=${
       this.state.search
     }&type=video`;
+    this.setState({loading: 'Loading...'})
 
     axios
       .get(searchUrl)

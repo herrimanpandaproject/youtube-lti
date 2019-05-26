@@ -5,7 +5,7 @@ class styles {
         boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
         width: '60%',
         maxWidth: '378px',
-        minWidth: '220px',
+        minWidth: '250px',
         margin: '0 auto',
         borderRadius: '10px'
       };
