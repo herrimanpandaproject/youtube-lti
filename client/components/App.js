@@ -1,14 +1,12 @@
-import React, {Component} from 'react';
-import SearchBar from './SearchBar';
-import SearchResult from './SearchResult';
-import Pages from './Pages';
-import axios from 'axios';
-import {Alert} from '@instructure/ui-alerts';
+import React, {Component} from "react";
+import {Alert} from "@instructure/ui-alerts";
+import SearchBar from "./SearchBar";
+import SearchResult from "./SearchResult";
+import Pages from "./Pages";
+import axios from "axios";
 
 class App extends Component {
-  // Jaden key  
-  // apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
-  apiKey = 'AIzaSyBwv3sutjNiWbhJOAL8PLWe1rO_AJg9v2U';
+  apiKey = "AIzaSyBwv3sutjNiWbhJOAL8PLWe1rO_AJg9v2U";
 
   constructor(props) {
     super(props);
@@ -19,46 +17,12 @@ class App extends Component {
       currentPage: 0,
     };
   }
-  render() {
-    console.log(this.state);
-    return (
-      <div>
-        <SearchBar
-          onChange={this.handleChange}
-          onKeyDown={this.handleKey}
-          search={this.search}
-        />
-        {this.state.error ? (
-          <Alert variant="error" closeButtonLabel="Close" margin="small">
-            {this.state.error.message}
-          </Alert>
-        ) : (
-          ''
-        )}
-        <SearchResult
-          result={this.state.stats}
-          onEmbed={this.onEmbed}
-          page={this.state.currentPage}
-          resultsPerPage={this.state.resultsPerPage}
-          length={this.state.length}
-        />
-        {this.state.stats.length > 0 ? (
-          <Pages
-            nextPage={this.nextPage}
-            pages={Math.round(
-              this.state.maxResults / this.state.resultsPerPage,
-            )}
-          />
-        ) : (
-          <p style={{textAlign: 'center'}}>{this.state.loading}</p>
-        )}
 
-      </div>
-    );
-  }
-
-  // passes the Axios request to the Youtube API to get the response, which is the JSON file. From there we set result to be equal to
-  // the json file, to avoid issues with the interpolation of {this.state.search} in searchUrl.
+  // Passes the Axios request to the Youtube API to get the results. 
+  // From there we set result to be equal to the json response, to avoid issues
+  // with the interpolation of {this.state.search} in searchUrl. Also allows
+  // the Loading indicator to be displayed while the search request is sent and
+  // received
   search = () => {
     let self = this;
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
@@ -66,7 +30,8 @@ class App extends Component {
     }&part=snippet&maxResults=${this.state.maxResults}&q=${
       this.state.search
     }&type=video`;
-    this.setState({loading: 'Loading...'})
+    
+    this.setState({loading: "Loading..."})
 
     axios
       .get(searchUrl)
@@ -83,7 +48,6 @@ class App extends Component {
               stats: res.data.items,
               length: res.data.items.length,
             });
-            console.log(self.state.stats);
           })
           .catch(function(err) {
             console.log(err);
@@ -96,34 +60,75 @@ class App extends Component {
       });
   };
 
+  // Checks if the user presses enter to search for a video
   handleKey = e => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       this.search();
     }
   };
 
+  // Updates the search field as the user types their search
   handleChange = field => {
     this.setState(field.search);
   };
 
+  // Combines the videoId's to allow for a call to the YouTube API, 
+  // getting stats on all the videos
   combineIds = items => {
     let combinedVideoIds = "";
-    let numberOfResponses = 0; 
-    while ( numberOfResponses < this.state.maxResults)
-    {
-      combinedVideoIds += "%2C" + items[numberOfResponses].id.videoId;
-      numberOfResponses = numberOfResponses + 1;
+    for(let i = 0; i < this.state.maxResults; i++) {
+      combinedVideoIds += "%2C" + items[i].id.videoId;
     }
     return combinedVideoIds;
   };
 
+  // Takes the selected video, and size, updates state to give props to embed 
+  // an iFrame in the canvas module
   onEmbed = videoProps => {
     this.setState({iframeProps: videoProps});
+    console.log(this.state.iframeProps)
   };
 
+  // Increments the page count to move the search result to a new page
   nextPage = page => {
     this.setState({currentPage: page});
   };
+
+  render() {
+    return (
+      <div>
+        <SearchBar
+          onChange = {this.handleChange}
+          onKeyDown = {this.handleKey}
+          search = {this.search}
+        />
+        {
+          this.state.error 
+            ? <Alert variant = "error" closeButtonLabel = "Close" margin = "small">
+                {this.state.error.message}
+              </Alert> 
+            : ""
+        }
+        <SearchResult
+          result = {this.state.stats}
+          onEmbed = {this.onEmbed}
+          page = {this.state.currentPage}
+          resultsPerPage = {this.state.resultsPerPage}
+          length = {this.state.length}
+        />
+        {
+          this.state.stats.length > 0 
+          ? <Pages
+              nextPage = {this.nextPage}
+              pages = {Math.round(
+                this.state.maxResults / this.state.resultsPerPage,
+              )}
+            />
+          : <p style = {{textAlign: "center"}}>{this.state.loading}</p>
+        }
+      </div>
+    );
+  }
 }
 
 export default App;
