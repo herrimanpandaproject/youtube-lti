@@ -17,8 +17,8 @@ class VideoStats extends Component {
   
   render() {
     return(
-      <div style={{maxWidth: '200px'}}>
-        <div style={{display: 'inline-flex'}}>
+      <div style={{maxWidth: '290px'}}>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
           {numeral(this.props.stats.viewCount).format('0.0a')}
           <IconEyeLine color="primary" />
           {numeral(this.props.stats.likeCount).format('0.0a')}
@@ -26,9 +26,9 @@ class VideoStats extends Component {
           <div style={{display: 'inline-flex', height: '7.5px', position: 'relative', top: '5px'}}>
             <div style={this.styleGreen}></div>
             <div style={this.styleRed}></div>
-            {' '}<IconLikeLine color="primary" rotate="180"/>
           </div>
-          {' ' + numeral(this.props.stats.dislikeCount).format('0.0a')}
+          <IconLikeLine color="primary" rotate="180"/>
+          {numeral(this.props.stats.dislikeCunt).format('0.0a')}
         </div>
       </div>
     )
