@@ -3,122 +3,127 @@ import SearchBar from './SearchBar';
 import SearchResult from './SearchResult';
 import Pages from './Pages';
 import axios from 'axios';
-import styles from './Sheet.css';
-import {themeable} from '@instructure/ui-themeable'
-import { Alert } from '@instructure/ui-alerts'
+import {Alert} from '@instructure/ui-alerts';
 
-const EMPTY_THEME = () => {};
-
-@themeable(EMPTY_THEME, styles)
 class App extends Component {
-  apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
+  // Jaden key  
+  // apiKey = 'AIzaSyBDV4M3bIZXFCTPq3cyqQoO_EqalwJvHz0';
+  apiKey = 'AIzaSyBwv3sutjNiWbhJOAL8PLWe1rO_AJg9v2U';
 
   constructor(props) {
     super(props);
     this.state = {
-      stats:[],
-      maxResults: 50,
+      stats: [],
+      maxResults: 45,
       resultsPerPage: 5,
-      currentPage: 0
+      currentPage: 0,
     };
   }
   render() {
-    console.log(this.state)
+    console.log(this.state);
     return (
-      <div >
-        <p className={styles.selector}>
-          Test
-        </p>
+      <div>
         <SearchBar
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
           search={this.search}
         />
-        {this.state.error ? 
-          <Alert
-            variant="error"
-            closeButtonLabel="Close"
-            margin="small"
-          > 
-            {this.state.error.message} 
-          </Alert> :
+        {this.state.error ? (
+          <Alert variant="error" closeButtonLabel="Close" margin="small">
+            {this.state.error.message}
+          </Alert>
+        ) : (
           ''
-        }
-        <SearchResult 
-          result={this.state.stats} 
-          onEmbed={this.onEmbed} 
+        )}
+        <SearchResult
+          result={this.state.stats}
+          onEmbed={this.onEmbed}
           page={this.state.currentPage}
           resultsPerPage={this.state.resultsPerPage}
           length={this.state.length}
         />
-        {this.state.stats.length > 0 ? 
-          <Pages nextPage={this.nextPage} pages={Math.round(this.state.maxResults/this.state.resultsPerPage)}/>
-          :
-          ''
-        }
+        {this.state.stats.length > 0 ? (
+          <Pages
+            nextPage={this.nextPage}
+            pages={Math.round(
+              this.state.maxResults / this.state.resultsPerPage,
+            )}
+          />
+        ) : (
+          <p style={{textAlign: 'center'}}>{this.state.loading}</p>
+        )}
+
       </div>
     );
   }
 
-    // passes the Axios request to the Youtube API to get the response, which is the JSON file. From there we set result to be equal to
-    // the json file, to avoid issues with the interpolation of {this.state.search} in searchUrl. 
+  // passes the Axios request to the Youtube API to get the response, which is the JSON file. From there we set result to be equal to
+  // the json file, to avoid issues with the interpolation of {this.state.search} in searchUrl.
   search = () => {
     let self = this;
     let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${
       this.apiKey
-    }&part=snippet&maxResults=${this.state.maxResults}&q=${this.state.search}&type=video`;
-    
+    }&part=snippet&maxResults=${this.state.maxResults}&q=${
+      this.state.search
+    }&type=video`;
+    this.setState({loading: 'Loading...'})
+
     axios
       .get(searchUrl)
       .then(function(res) {
         let combinedId = self.combineIds(res.data.items);
         axios
-        .get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${combinedId}&key=${self.apiKey}`)
-        .then(function(res) {
-          self.setState({stats:res.data.items, length: res.data.items.length});
-          console.log(self.state.stats);
-        })
-        .catch(function(err) {
-          console.log(err);
-          self.setState({error: err})
-        });
+          .get(
+            `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${combinedId}&key=${
+              self.apiKey
+            }`,
+          )
+          .then(function(res) {
+            self.setState({
+              stats: res.data.items,
+              length: res.data.items.length,
+            });
+            console.log(self.state.stats);
+          })
+          .catch(function(err) {
+            console.log(err);
+            self.setState({error: err});
+          });
       })
       .catch(function(err) {
         console.log(err);
-        self.setState({error: err})
-      });  
-  }
-  
-  handleKey = (e) => {
+        self.setState({error: err});
+      });
+  };
+
+  handleKey = e => {
     if (e.key === 'Enter') {
       this.search();
     }
   };
 
-  handleChange = (field) => {
+  handleChange = field => {
     this.setState(field.search);
   };
 
-  combineIds = (items) =>
-  {
+  combineIds = items => {
     let combinedVideoIds = "";
-    var numberOfResponses = 0; 
-    while ( numberOfResponses < this.state.maxResults - 1 )
+    let numberOfResponses = 0; 
+    while ( numberOfResponses < this.state.maxResults)
     {
-      combinedVideoIds = combinedVideoIds + "%2C" + items[numberOfResponses].id.videoId;
+      combinedVideoIds += "%2C" + items[numberOfResponses].id.videoId;
       numberOfResponses = numberOfResponses + 1;
     }
     return combinedVideoIds;
-  }
+  };
 
   onEmbed = videoProps => {
-    this.setState({iframeProps : videoProps});
+    this.setState({iframeProps: videoProps});
   };
 
   nextPage = page => {
     this.setState({currentPage: page});
-  }
-
+  };
 }
 
 export default App;

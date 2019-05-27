@@ -1,77 +1,132 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {Flex, FlexItem} from '@instructure/ui-layout';
 import {Heading} from '@instructure/ui-elements';
-import { Img } from '@instructure/ui-elements';
+import {Img} from '@instructure/ui-elements';
 import moment from 'moment';
 import numeral from 'numeral';
-import { IconEyeLine } from '@instructure/ui-icons';
-import { IconLikeLine } from '@instructure/ui-icons';
-import { Pagination } from '@instructure/ui-pagination';
-import EmbedButton from './EmbedButton'
+import styles from './Sheet.js';
+import {IconEyeLine} from '@instructure/ui-icons';
+import {IconLikeLine} from '@instructure/ui-icons';
+import {Pagination} from '@instructure/ui-pagination';
+import EmbedButton from './EmbedButton';
+import {Button} from '@instructure/ui-buttons';
+import { IconInfoLine } from '@instructure/ui-icons';
+import VideoStats from './VideoStats'
 
 class SearchResult extends Component {
-  state = {}
+  state = {};
+  styles = new styles();
+  page = this.props.page;
 
   componentDidUpdate() {
-    window.scrollTo(0, 0)
+    if(this.props.page != this.page) {
+      this.page = this.props.page
+      window.scrollTo(0, 0);
+    }
+  }
+
+  showDetail = result => {
+    if(this.state.key == result.etag) {
+      this.setState({
+        key: '',
+      });
+    } else {
+      this.setState({
+        key: result.etag,
+      });
+    } 
+  };
+
+  calcPercent = ({likeCount, dislikeCount}) => {
+    const likes = parseInt(likeCount);
+    const dislikes = parseInt(dislikeCount);
+    return likes/(likes+dislikes)*100;
   }
 
   render() {
-    this.content && this.setState({ width: this.measureElement(this.content).width });
-    let column = this.state.width < 500;
-    let min = (this.props.page) * this.props.resultsPerPage;
-    let max = (this.props.resultsPerPage*(this.props.page+1))-1;
-    max = max >= this.props.length ? this.props.length-1 : max;
-    
-    return (
-      this.props.result.map((result, index) => {
-        return index >= min && index <= max ? 
-          <div 
-            style= {{
-              backgroundColor: '#eaebed', 
-              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-              width: '60%',
-              maxWidth: '378px',
-              minWidth: '220px',
-              margin: '0 auto',
-              borderRadius: '10px'
-            }}
-            key={result.etag}
-            //ref={(ref) => this._div = ref}
+    let min = this.props.page * this.props.resultsPerPage;
+    let max = this.props.resultsPerPage * (this.props.page + 1) - 1;
+    max = max >= this.props.length ? this.props.length - 1 : max;
+
+    return this.props.result.map((result, index) => {
+      const percent = this.calcPercent(result.statistics)
+      return index >= min && index <= max ? (
+        <div
+          style={
+            this.state.key == result.etag
+              ? this.styles.detailedCard
+              : this.styles.resultCard
+          }
+          key={result.etag}
+        >
+          <Flex
+            justifyItems="space-between"
+            margin="large none x-small none"
+            direction="column"
           >
-            <Flex justifyItems = "space-between" margin = "large none large none" direction='column'>
-              <FlexItem padding = "medium" align="center">
-                <Img src = {result.snippet.thumbnails.medium.url} alt = "Image not found." style = {{
+            <FlexItem padding="medium" align="center">
+              {this.state.key == result.etag ?
+              <iframe width="510" height="315" src={`https://www.youtube.com/embed/${result.id}`} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> 
+              : 
+              <Img
+                src={result.snippet.thumbnails.medium.url}
+                alt="Image not found."
+                style={{
                   borderRadius: '10px',
-                }}/>
-              </FlexItem>
-              <FlexItem padding="none medium none medium">
-                <Heading level="h4">{result.snippet.title.replace(/&#39;/g,"'").replace(/&quot;/g, '"')}</Heading>
-                <p>{moment(result.snippet.publishedAt, moment.ISO_8601).format('MMMM DD, YYYY')}</p>
-                <p>
-                  {numeral(result.statistics.viewCount).format('0.0a')} <IconEyeLine color = "primary"/> {'- '}
-                  {numeral(result.statistics.likeCount).format('0.0a')} <IconLikeLine color = "primary"/> {'- '}
-                  {numeral(result.statistics.dislikeCount).format('0.0a')} <IconLikeLine rotate = "180" color = "primary"/> 
-                </p>  
-                <p style = {{
-                  fontFamily: 'Arial, sans-serif', 
-                  wordWrap: 'break-word',
-                  }}
+                }}
+              /> }
+              
+            </FlexItem>
+            <FlexItem padding="none medium none medium">
+              <Heading level="h4">
+                {result.snippet.title
+                  .replace(/&#39;/g, "'")
+                  .replace(/&quot;/g, '"')}
+              </Heading>
+              <p> 
+                Published By:
+                 <a 
+                href={`https://www.youtube.com/channel/${
+                  result.snippet.channelId
+                }`}
+                target="_blank"
+                style = {this.styles.channelStyle}
                 >
-                  {result.snippet.description.length > 213
-                  ? result.snippet.description.substring(0, 211)+"..."
-                  : result.snippet.description}
-                </p>
-              </FlexItem>
-              <FlexItem padding="none none medium none" align="center">
-                <EmbedButton onEmbed={this.props.onEmbed} videoId={result.id} title={result.snippet.title}/>
-              </FlexItem>
-            </Flex>
-          </div> : ''
-      })
-    )
+                 {' '}{result.snippet.channelTitle}
+                </a>
+              </p>
+              <p>
+                {moment(result.snippet.publishedAt, moment.ISO_8601).format(
+                  'MMMM DD, YYYY',
+                )}
+              </p>
+              <VideoStats percent={percent} stats={result.statistics}/>
+              <p style = {this.styles.overflowPrevention}>
+                {this.state.key == result.etag ? result.snippet.description.substring(0, 611) + '...' : 
+                  result.snippet.description.substring(0, 211) + '...'}
+              </p>
+            </FlexItem>
+          </Flex>
+          <Flex justifyItems = "end">
+          <FlexItem padding="none none small x-small">
+              <Button onClick={() => this.showDetail(result)} icon = {IconInfoLine}  margin="none none none medium">
+                Details
+              </Button>
+            </FlexItem>
+          <FlexItem padding = "none none small small">
+            <EmbedButton
+                onEmbed={this.props.onEmbed}
+                videoId={result.id}
+                title={result.snippet.title}
+              />
+          </FlexItem>
+          </Flex>
+        </div>
+      ) : (
+        ''
+      );
+    });
   }
 }
 
-export default SearchResult
+export default SearchResult;

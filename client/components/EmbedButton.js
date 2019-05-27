@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Menu} from '@instructure/ui-menu';
 import {Button} from '@instructure/ui-buttons';
+import { IconExpandLine } from '@instructure/ui-icons';
 
 class EmbedButton extends Component {
   constructor(props) {
@@ -9,17 +10,17 @@ class EmbedButton extends Component {
   }
   render() {
     return (
-      <Menu placement="bottom" trigger={<Button>Embed</Button>}>
-        <Menu.Group
-          label="Size"
-          selected={this.state.selection}
-          onSelect={this.handleSelect}
-        >
-          <Menu.Item value="small">Small</Menu.Item>
-          <Menu.Item value="medium">Medium</Menu.Item>
-          <Menu.Item value="large">Large</Menu.Item>
-        </Menu.Group>
-      </Menu>
+        <Menu placement="bottom" trigger={<Button variant = "primary" margin = "0 x-small 0 0" icon = {IconExpandLine}>Embed</Button>}>
+          <Menu.Group
+            label="Size"
+            selected={this.state.selection}
+            onSelect={this.handleSelect}
+          >
+            <Menu.Item value="small">Small</Menu.Item>
+            <Menu.Item value="medium">Medium</Menu.Item>
+            <Menu.Item value="large">Large</Menu.Item>
+          </Menu.Group>
+        </Menu>
     );
   }
 
